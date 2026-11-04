@@ -54,8 +54,7 @@ try {
  status(await api("/api/auth/saya", "GET", undefined, "rusak"), 401);
  assert.equal((await pool.query(
  "SELECT current_database() AS nama")).rows[0].nama, "sisabaik_dev");
- for (const [email, nama] of [[emailRina, "Rina Uji"], [emailBudi, "Budi
-Uji"]]) {
+ for (const [email, nama] of [[emailRina, "Rina Uji"], [emailBudi, "Budi Uji"]]) {
  const reg = await api("/api/auth/registrasi-penyedia", "POST", {
  namaLengkap: nama, email, kataSandi: password,
  namaUsaha: `Dapur ${nama}`, alamat: "Jl. Kampus No. 8, Padang",
@@ -70,8 +69,7 @@ Uji"]]) {
  undefined, sesi.accessToken);
  status(pending, 403);
  assert.equal(pending.body.error.code, "PROVIDER_NOT_VERIFIED");
- const dbAkun = (await pool.query("SELECT id,kata_sandi_hash FROM pengguna
-WHERE email=$1", [email])).rows[0];
+ const dbAkun = (await pool.query("SELECT id,kata_sandi_hash FROM pengguna WHERE email=$1", [email])).rows[0];
  assert.equal(String(dbAkun?.id), reg.body.data.id,
  "Server HTTP dan script harus memakai database yang sama.");
  assert.ok(dbAkun.kata_sandi_hash && dbAkun.kata_sandi_hash !== password);
