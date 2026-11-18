@@ -44,9 +44,15 @@ try {
   for (const path of aset) {
     const r = await baca(path);
     assert.equal(r.status, 200, path);
+    let expectedType = /javascript/;
+    if (path.endsWith(".css")) {
+      expectedType = /text\/css/;
+    } else if (path.endsWith(".svg")) {
+      expectedType = /image\/svg\+xml/;
+    }
     assert.match(
       r.headers.get("content-type") ?? "",
-      path.endsWith(".css") ? /text\/css/ : /javascript/,
+      expectedType,
     );
   }
   lulus("aset JavaScript dan CSS");
